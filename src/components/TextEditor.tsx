@@ -28,10 +28,8 @@ const TextEditor = () => {
     const start = selection.getStartOffset();
     const text = currentBlock.getText();
 
-    // Only process if we're at the end of the markers
     if (chars === ' ' && start > 0) {
       if (text === '#') {
-        // Handle heading
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
@@ -48,7 +46,6 @@ const TextEditor = () => {
         setEditorState(RichUtils.toggleBlockType(newEditorState, 'header-one'));
         return 'handled';
       } else if (text === '*') {
-        // Handle bold
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
@@ -65,7 +62,6 @@ const TextEditor = () => {
         setEditorState(RichUtils.toggleInlineStyle(newEditorState, 'BOLD'));
         return 'handled';
       } else if (text === '**') {
-        // Handle red text
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
@@ -82,7 +78,6 @@ const TextEditor = () => {
         setEditorState(RichUtils.toggleInlineStyle(newEditorState, 'RED'));
         return 'handled';
       } else if (text === '***') {
-        // Handle underline
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
@@ -118,15 +113,15 @@ const TextEditor = () => {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Demo editor by &lt;Name&gt;</h1>
+        <h1 className="text-lg font-normal">Demo editor by &lt;Name&gt;</h1>
         <button
           onClick={handleSave}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+          className="px-4 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50 transition-colors"
         >
           Save
         </button>
       </div>
-      <div className="border border-gray-300 rounded-lg p-4 min-h-[500px] bg-white">
+      <div className="border border-blue-200 rounded p-4 min-h-[500px] bg-white">
         <Editor
           editorState={editorState}
           onChange={setEditorState}
