@@ -118,7 +118,7 @@ const TextEditor = () => {
         </div>
         <button
           onClick={handleSave}
-          className="px-6 py-1 bg-white border border-gray-300 rounded text-sm shadow-black hover:bg-gray-50 transition-colors min-w-[80px]"
+          className="px-6 py-1 bg-white border border-gray-300 rounded text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-gray-50 transition-colors min-w-[80px]"
         >
           Save
         </button>
