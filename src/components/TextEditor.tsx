@@ -114,11 +114,11 @@ const TextEditor = () => {
     <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
         <div className="flex-grow text-center">
-          <h1 className="text-base font-normal">Demo editor by &lt;Name&gt;</h1>
+          <h1 className="text-xs font-normal">Demo editor by &lt;Name&gt;</h1>
         </div>
         <button
           onClick={handleSave}
-          className="px-6 py-1 bg-white border border-gray-300 rounded text-sm shadow-sm hover:bg-gray-50 transition-colors min-w-[80px]"
+          className="px-6 py-1 bg-white border border-gray-300 rounded text-sm shadow-black hover:bg-gray-50 transition-colors min-w-[80px]"
         >
           Save
         </button>
