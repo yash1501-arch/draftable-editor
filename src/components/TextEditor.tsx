@@ -111,17 +111,19 @@ const TextEditor = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-lg font-normal">Demo editor by &lt;Name&gt;</h1>
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+        <div className="flex-grow text-center">
+          <h1 className="text-base font-normal">Demo editor by &lt;Name&gt;</h1>
+        </div>
         <button
           onClick={handleSave}
-          className="px-4 py-1 bg-white border border-gray-300 rounded text-sm hover:bg-gray-50 transition-colors"
+          className="px-6 py-1 bg-white border border-gray-300 rounded text-sm shadow-sm hover:bg-gray-50 transition-colors min-w-[80px]"
         >
           Save
         </button>
       </div>
-      <div className="border border-blue-200 rounded p-4 min-h-[500px] bg-white">
+      <div className="border border-[#99c5ff] rounded p-4 min-h-[500px] bg-white">
         <Editor
           editorState={editorState}
           onChange={setEditorState}
