@@ -29,8 +29,8 @@ const TextEditor = () => {
     const text = currentBlock.getText();
 
     if (chars === ' ' && start > 0) {
-      // Handle heading with #
-      if (text === '#') {
+      // Handle heading with $
+      if (text === '$') {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
@@ -105,30 +105,6 @@ const TextEditor = () => {
     return 'not-handled';
   };
 
-  const handleReturn = (e: React.KeyboardEvent) => {
-    const currentContent = editorState.getCurrentContent();
-    const selection = editorState.getSelection();
-    
-    // Create a new block but maintain current styles
-    const newContent = Modifier.splitBlock(currentContent, selection);
-    let newEditorState = EditorState.push(
-      editorState,
-      newContent,
-      'split-block'
-    );
-
-    // Only reset block type (for headings) but keep inline styles
-    const newSelection = newEditorState.getSelection();
-    newEditorState = EditorState.push(
-      newEditorState,
-      Modifier.setBlockType(newContent, newSelection, 'unstyled'),
-      'change-block-type'
-    );
-
-    setEditorState(newEditorState);
-    return 'handled';
-  };
-
   const handleSave = () => {
     const content = editorState.getCurrentContent();
     localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
@@ -138,7 +114,23 @@ const TextEditor = () => {
   const styleMap = {
     'RED': {
       color: '#FF0000',
+      fontSize: '18px',
     },
+    'BOLD': {
+      fontWeight: 'bold',
+      fontSize: '18px',
+    },
+    'UNDERLINE': {
+      textDecoration: 'underline',
+      fontSize: '18px',
+    },
+  };
+
+  const blockStyleFn = (contentBlock: any) => {
+    const type = contentBlock.getType();
+    if (type === 'header-one') {
+      return 'header-style';
+    }
   };
 
   return (
@@ -155,11 +147,21 @@ const TextEditor = () => {
         </button>
       </div>
       <div className="border border-[#99c5ff] rounded p-4 min-h-[500px] bg-white">
+        <style>
+          {`
+            .header-style {
+              font-size: 24px;
+              font-weight: bold;
+              color: black;
+            }
+          `}
+        </style>
         <Editor
           editorState={editorState}
           onChange={setEditorState}
           handleBeforeInput={handleBeforeInput}
           customStyleMap={styleMap}
+          blockStyleFn={blockStyleFn}
         />
       </div>
     </div>
