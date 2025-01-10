@@ -138,23 +138,7 @@ const TextEditor = () => {
   const styleMap = {
     'RED': {
       color: '#FF0000',
-      fontSize: '18px',
     },
-    'BOLD': {
-      fontWeight: 'bold',
-      fontSize: '18px',
-    },
-    'UNDERLINE': {
-      textDecoration: 'underline',
-      fontSize: '18px',
-    },
-  };
-
-  const blockStyleFn = (contentBlock: any) => {
-    const type = contentBlock.getType();
-    if (type === 'header-one') {
-      return 'header-style';
-    }
   };
 
   return (
@@ -171,22 +155,11 @@ const TextEditor = () => {
         </button>
       </div>
       <div className="border border-[#99c5ff] rounded p-4 min-h-[500px] bg-white">
-        <style>
-          {`
-            .header-style {
-              font-size: 24px;
-              font-weight: bold;
-              color: black;
-            }
-          `}
-        </style>
         <Editor
           editorState={editorState}
           onChange={setEditorState}
           handleBeforeInput={handleBeforeInput}
-          handleReturn={handleReturn}
           customStyleMap={styleMap}
-          blockStyleFn={blockStyleFn}
         />
       </div>
     </div>
