@@ -105,6 +105,25 @@ const TextEditor = () => {
     return 'not-handled';
   };
 
+  const handleReturn = (e: React.KeyboardEvent) => {
+    const currentContent = editorState.getCurrentContent();
+    const selection = editorState.getSelection();
+    const currentBlock = currentContent.getBlockForKey(selection.getStartKey());
+    
+    // Remove all inline styles when Enter is pressed
+    const newEditorState = EditorState.push(
+      editorState,
+      Modifier.setBlockType(currentContent, selection, 'unstyled'),
+      'change-block-type'
+    );
+    
+    setEditorState(
+      EditorState.setInlineStyleOverride(newEditorState, null)
+    );
+    
+    return 'handled';
+  };
+
   const handleSave = () => {
     const content = editorState.getCurrentContent();
     localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
@@ -160,6 +179,7 @@ const TextEditor = () => {
           editorState={editorState}
           onChange={setEditorState}
           handleBeforeInput={handleBeforeInput}
+          handleReturn={handleReturn}
           customStyleMap={styleMap}
           blockStyleFn={blockStyleFn}
         />
