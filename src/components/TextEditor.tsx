@@ -151,7 +151,7 @@ const TextEditor = () => {
           {`
             .header-style {
               font-size: 24px;
-              font-weight: normal;
+              font-weight: bold;
               color: black;
             }
           `}
