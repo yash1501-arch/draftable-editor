@@ -29,7 +29,8 @@ const TextEditor = () => {
     const text = currentBlock.getText();
 
     if (chars === ' ' && start > 0) {
-      if (text === '#') {
+      // Handle heading with $
+      if (text === '$') {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
@@ -45,7 +46,9 @@ const TextEditor = () => {
         );
         setEditorState(RichUtils.toggleBlockType(newEditorState, 'header-one'));
         return 'handled';
-      } else if (text === '*') {
+      }
+      // Handle bold with single *
+      else if (text === '*') {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
@@ -61,7 +64,9 @@ const TextEditor = () => {
         );
         setEditorState(RichUtils.toggleInlineStyle(newEditorState, 'BOLD'));
         return 'handled';
-      } else if (text === '**') {
+      }
+      // Handle red color with **
+      else if (text === '**') {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
@@ -77,7 +82,9 @@ const TextEditor = () => {
         );
         setEditorState(RichUtils.toggleInlineStyle(newEditorState, 'RED'));
         return 'handled';
-      } else if (text === '***') {
+      }
+      // Handle underline with ***
+      else if (text === '***') {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
@@ -107,7 +114,23 @@ const TextEditor = () => {
   const styleMap = {
     'RED': {
       color: '#FF0000',
+      fontSize: '18px',
     },
+    'BOLD': {
+      fontWeight: 'bold',
+      fontSize: '18px',
+    },
+    'UNDERLINE': {
+      textDecoration: 'underline',
+      fontSize: '18px',
+    },
+  };
+
+  const blockStyleFn = (contentBlock: any) => {
+    const type = contentBlock.getType();
+    if (type === 'header-one') {
+      return 'header-style';
+    }
   };
 
   return (
@@ -124,11 +147,21 @@ const TextEditor = () => {
         </button>
       </div>
       <div className="border border-[#99c5ff] rounded p-4 min-h-[500px] bg-white">
+        <style>
+          {`
+            .header-style {
+              font-size: 24px;
+              font-weight: normal;
+              color: black;
+            }
+          `}
+        </style>
         <Editor
           editorState={editorState}
           onChange={setEditorState}
           handleBeforeInput={handleBeforeInput}
           customStyleMap={styleMap}
+          blockStyleFn={blockStyleFn}
         />
       </div>
     </div>
