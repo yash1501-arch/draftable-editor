@@ -108,19 +108,24 @@ const TextEditor = () => {
   const handleReturn = (e: React.KeyboardEvent) => {
     const currentContent = editorState.getCurrentContent();
     const selection = editorState.getSelection();
-    const currentBlock = currentContent.getBlockForKey(selection.getStartKey());
     
-    // Remove all inline styles when Enter is pressed
-    const newEditorState = EditorState.push(
+    // Create a new block but maintain current styles
+    const newContent = Modifier.splitBlock(currentContent, selection);
+    let newEditorState = EditorState.push(
       editorState,
-      Modifier.setBlockType(currentContent, selection, 'unstyled'),
+      newContent,
+      'split-block'
+    );
+
+    // Only reset block type (for headings) but keep inline styles
+    const newSelection = newEditorState.getSelection();
+    newEditorState = EditorState.push(
+      newEditorState,
+      Modifier.setBlockType(newContent, newSelection, 'unstyled'),
       'change-block-type'
     );
-    
-    setEditorState(
-      EditorState.setInlineStyleOverride(newEditorState, null)
-    );
-    
+
+    setEditorState(newEditorState);
     return 'handled';
   };
 
