@@ -29,7 +29,7 @@ const TextEditor = () => {
     const text = currentBlock.getText();
 
     if (chars === ' ' && start > 0) {
-      // Handle heading with $
+      // Handle heading with #
       if (text === '#') {
         const newContent = Modifier.replaceText(
           currentContent,
@@ -105,6 +105,30 @@ const TextEditor = () => {
     return 'not-handled';
   };
 
+  const handleReturn = (e: React.KeyboardEvent) => {
+    const currentContent = editorState.getCurrentContent();
+    const selection = editorState.getSelection();
+    
+    // Create a new block but maintain current styles
+    const newContent = Modifier.splitBlock(currentContent, selection);
+    let newEditorState = EditorState.push(
+      editorState,
+      newContent,
+      'split-block'
+    );
+
+    // Only reset block type (for headings) but keep inline styles
+    const newSelection = newEditorState.getSelection();
+    newEditorState = EditorState.push(
+      newEditorState,
+      Modifier.setBlockType(newContent, newSelection, 'unstyled'),
+      'change-block-type'
+    );
+
+    setEditorState(newEditorState);
+    return 'handled';
+  };
+
   const handleSave = () => {
     const content = editorState.getCurrentContent();
     localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
@@ -113,16 +137,20 @@ const TextEditor = () => {
 
   const styleMap = {
     'RED': {
-      color: '#FF0000',
+      color: 'red',
       fontSize: '18px',
+      fontWeight: 'bold',
     },
     'BOLD': {
       fontWeight: 'bold',
       fontSize: '18px',
+      color: 'black',
     },
     'UNDERLINE': {
       textDecoration: 'underline',
       fontSize: '18px',
+      color: 'black',
+      fontWeight: 'normal',
     },
   };
 
@@ -160,6 +188,7 @@ const TextEditor = () => {
           editorState={editorState}
           onChange={setEditorState}
           handleBeforeInput={handleBeforeInput}
+          handleReturn={handleReturn}
           customStyleMap={styleMap}
           blockStyleFn={blockStyleFn}
         />
