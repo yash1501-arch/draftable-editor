@@ -30,7 +30,7 @@ const TextEditor = () => {
 
     if (chars === ' ' && start > 0) {
       // Handle heading with $
-      if (text === '$') {
+      if (text === '#') {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
