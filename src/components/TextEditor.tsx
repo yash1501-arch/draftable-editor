@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Editor,
   EditorState,
@@ -7,13 +7,13 @@ import {
   convertToRaw,
   convertFromRaw,
   Modifier,
-} from 'draft-js';
-import 'draft-js/dist/Draft.css';
+} from "draft-js";
+import "draft-js/dist/Draft.css";
 import { toast } from "sonner";
 
 const TextEditor = () => {
   const [editorState, setEditorState] = useState(() => {
-    const savedContent = localStorage.getItem('draftContent');
+    const savedContent = localStorage.getItem("draftContent");
     if (savedContent) {
       const content = convertFromRaw(JSON.parse(savedContent));
       return EditorState.createWithContent(content);
@@ -28,136 +28,129 @@ const TextEditor = () => {
     const start = selection.getStartOffset();
     const text = currentBlock.getText();
 
-    if (chars === ' ' && start > 0) {
-      // Handle heading with #
-      if (text === '#') {
+    if (chars === " " && start > 0) {
+      if (text === "#") {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
             anchorOffset: 0,
             focusOffset: start,
           }),
-          ''
+          ""
         );
         const newEditorState = EditorState.push(
           editorState,
           newContent,
-          'change-block-type'
+          "change-block-type"
         );
-        setEditorState(RichUtils.toggleBlockType(newEditorState, 'header-one'));
-        return 'handled';
-      }
-      // Handle bold with single *
-      else if (text === '*') {
+        setEditorState(RichUtils.toggleBlockType(newEditorState, "header-one"));
+        return "handled";
+      } else if (text === "*") {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
             anchorOffset: 0,
             focusOffset: start,
           }),
-          ''
+          ""
         );
         const newEditorState = EditorState.push(
           editorState,
           newContent,
-          'change-inline-style'
+          "change-inline-style"
         );
-        setEditorState(RichUtils.toggleInlineStyle(newEditorState, 'BOLD'));
-        return 'handled';
-      }
-      // Handle red color with **
-      else if (text === '**') {
+        setEditorState(RichUtils.toggleInlineStyle(newEditorState, "BOLD"));
+        return "handled";
+      } else if (text === "**") {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
             anchorOffset: 0,
             focusOffset: start,
           }),
-          ''
+          ""
         );
         const newEditorState = EditorState.push(
           editorState,
           newContent,
-          'change-inline-style'
+          "change-inline-style"
         );
-        setEditorState(RichUtils.toggleInlineStyle(newEditorState, 'RED'));
-        return 'handled';
-      }
-      // Handle underline with ***
-      else if (text === '***') {
+        setEditorState(RichUtils.toggleInlineStyle(newEditorState, "RED"));
+        return "handled";
+      } else if (text === "***") {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
             anchorOffset: 0,
             focusOffset: start,
           }),
-          ''
+          ""
         );
         const newEditorState = EditorState.push(
           editorState,
           newContent,
-          'change-inline-style'
+          "change-inline-style"
         );
-        setEditorState(RichUtils.toggleInlineStyle(newEditorState, 'UNDERLINE'));
-        return 'handled';
+        setEditorState(
+          RichUtils.toggleInlineStyle(newEditorState, "UNDERLINE")
+        );
+        return "handled";
       }
     }
-    return 'not-handled';
+    return "not-handled";
   };
 
   const handleReturn = (e: React.KeyboardEvent) => {
     const currentContent = editorState.getCurrentContent();
     const selection = editorState.getSelection();
-    
-    // Create a new block but maintain current styles
+
     const newContent = Modifier.splitBlock(currentContent, selection);
     let newEditorState = EditorState.push(
       editorState,
       newContent,
-      'split-block'
+      "split-block"
     );
 
-    // Only reset block type (for headings) but keep inline styles
     const newSelection = newEditorState.getSelection();
     newEditorState = EditorState.push(
       newEditorState,
-      Modifier.setBlockType(newContent, newSelection, 'unstyled'),
-      'change-block-type'
+      Modifier.setBlockType(newContent, newSelection, "unstyled"),
+      "change-block-type"
     );
 
     setEditorState(newEditorState);
-    return 'handled';
+    return "handled";
   };
 
   const handleSave = () => {
     const content = editorState.getCurrentContent();
-    localStorage.setItem('draftContent', JSON.stringify(convertToRaw(content)));
+    localStorage.setItem("draftContent", JSON.stringify(convertToRaw(content)));
     toast("Content saved successfully!");
   };
 
   const styleMap = {
-    'RED': {
-      color: 'red',
-      fontSize: '18px',
-      fontWeight: 'bold',
+    RED: {
+      color: "red",
+      fontSize: "18px",
+      fontWeight: "bold",
     },
-    'BOLD': {
-      fontWeight: 'bold',
-      fontSize: '18px',
-      color: 'black',
+    BOLD: {
+      fontWeight: "bold",
+      fontSize: "18px",
+      color: "black",
     },
-    'UNDERLINE': {
-      textDecoration: 'underline',
-      fontSize: '18px',
-      color: 'black',
-      fontWeight: 'normal',
+    UNDERLINE: {
+      textDecoration: "underline",
+      fontSize: "18px",
+      color: "black",
+      fontWeight: "normal",
     },
   };
 
   const blockStyleFn = (contentBlock: any) => {
     const type = contentBlock.getType();
-    if (type === 'header-one') {
-      return 'header-style';
+    if (type === "header-one") {
+      return "header-style";
     }
   };
 
