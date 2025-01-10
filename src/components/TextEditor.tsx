@@ -29,8 +29,8 @@ const TextEditor = () => {
     const text = currentBlock.getText();
 
     if (chars === ' ' && start > 0) {
-      // Handle heading with $
-      if (text === '$') {
+      // Handle heading with #
+      if (text === '#') {
         const newContent = Modifier.replaceText(
           currentContent,
           selection.merge({
